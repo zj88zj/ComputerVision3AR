@@ -42,6 +42,46 @@ def get_corners_list(image):
     return [top_left, bottom_left, top_right, bottom_right]
     
 
+# def matchTemplates(listTemplates, image, method=cv2.TM_CCOEFF_NORMED, score_threshold=0.5, maxOverlap=0):
+#     xOffset=yOffset=0
+#     listHit = []
+#     for tempTuple in listTemplates:
+#         templateName, template = tempTuple[:2]
+#         corrMap = cv2.matchTemplate(image, template, method)
+#         if (-corrMap).shape == (1,1): 
+#             if (-corrMap)[0,0]>=-score_threshold:
+#                 Peaks = np.array([[0,0]])
+#             else:
+#                 Peaks = []
+#         elif (-corrMap).shape[0] == 1: 
+#             Peaks = find_peaks((-corrMap)[0], height=-score_threshold)
+#             Peaks = [[0,i] for i in Peaks[0]]
+#         elif (-corrMap).shape[1] == 1: 
+#             Peaks = find_peaks((-corrMap)[:,0], height=-score_threshold)
+#             Peaks = [[i,0] for i in Peaks[0]]
+#         else: 
+#             Peaks = peak_local_max(-corrMap, threshold_abs=-score_threshold, exclude_border=False).tolist()
+
+#         height, width = template.shape[0:2]
+#         for peak in Peaks :
+#             coeff  = corrMap[tuple(peak)]
+#             newHit = {'TemplateName':templateName, 'BBox': ( int(peak[1])+xOffset, int(peak[0])+yOffset, width, height ) , 'Score':coeff}
+#             listHit.append(newHit)
+#     if listHit:
+#         tableHit = pd.DataFrame(listHit)
+#     else:
+#         tableHit = pd.DataFrame(columns=["TemplateName", "BBox", "Score"])
+
+#     listBoxes  = tableHit["BBox"].to_list()
+#     listScores = tableHit["Score"].to_list()
+#     listScores = [1-score for score in listScores] # NMS expect high-score for good predictions
+#     scoreThreshold = 1-scoreThreshold
+#     indexes = cv2.dnn.NMSBoxes(listBoxes, listScores, scoreThreshold, maxOverlap)
+#     indexes  = [ index[0] for index in indexes ]
+#     outtable = tableHit.iloc[indexes]
+    
+#     return outtable
+
 
 def find_markers(image, template=None):
     """Finds four corner markers.
@@ -191,7 +231,13 @@ def project_imageA_onto_imageB(imageA, imageB, homography):
 
     dst = cv2.remap(src, map_x, map_y, cv2.INTER_LINEAR)
     blended = cv2.addWeighted(dst_true, 1, dst, 1, 0)
+
     # bitwise
+    # gray = cv2.cvtColor(dst,cv2.COLOR_BGR2GRAY)
+    # _, mask = cv2.threshold(gray, 10, 255, cv2.THRESH_BINARY)
+    # mask_inv = cv2.bitwise_not(mask)
+    # dst_ = cv2.bitwise_and(dst,dst,mask = mask_inv)
+    # blended = cv2.add(dst_true,dst_)
 
     # cv2.imshow('image', blended)
     # cv2.waitKey(0)
