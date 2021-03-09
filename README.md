@@ -1,5 +1,5 @@
 # ComputerVision3AR
-<h2>Predicting Credo in J&J Research and Development Purchase Orders</h2>  
+<h2>Augmented Reality</h2>  
 <h3>Keywords:</h3>
 <p>Computer Vision, Augmented Reality, Corner Detection, Projective Geometry, Image Warping, Video Processing</p>
 <h3>Libraries:</h3>
